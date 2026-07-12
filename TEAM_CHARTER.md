@@ -62,7 +62,7 @@ All code must follow the standard Kotlin naming conventions:
 ---
 *Maintained by: Clean Standards Member*
 
-## Member 3 – Team Charter & Communication Protocols
+## Member 3 – Communication & SLAs
 
 ## 1. Objective
 This document outlines the communication standards, internal protocols, and Service Level Agreements (SLAs) for the team to ensure project success, efficiency, and full alignment with IEEE standards.
