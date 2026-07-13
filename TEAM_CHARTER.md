@@ -1,5 +1,6 @@
 # Quantom Team Charter
 
+
 ## 1. Team Roles
 * **Workflow Lead (Member 1):** Repository governance, branching model maintenance, and commit message enforcement.
 * **Clean Standards Lead (Member 2):** Definition of coding styles, variable naming conventions, and linting standards.
