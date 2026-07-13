@@ -1,6 +1,5 @@
 # Quantom Team Charter
 
-## Member 1 – Workflow
 
 ## 1. Team Roles
 * **Workflow Lead (Member 1):** Repository governance, branching model maintenance, and commit message enforcement.
@@ -21,14 +20,13 @@ To maintain a clean and searchable history, all commits must follow the **Conven
 * **feat:** New feature addition.
 * **fix:** Bug correction.
 * **docs:** Changes to documentation.
-* **style:** Formatting, missing semicolons, whitespace (no code change).
+* **style:** Formatting, missing semi-colons, whitespace (no code change).
 * **refactor:** Restructuring code without changing behavior.
 * **test:** Adding or updating tests.
 * **chore:** Build process or auxiliary tool changes.
 
 *Example: `feat(workflow): establish team roles and branching model`*
 
-## Member 2 – Clean Standards
 
 To ensure the highest quality of our Smart Systems project and to maintain consistency across the team's codebase, all members must strictly adhere to the following clean code and style standards.
 
@@ -61,75 +59,3 @@ All code must follow the standard Kotlin naming conventions:
 
 ---
 *Maintained by: Clean Standards Member*
-
-## Member 3 – Communication & SLAs
-
-## 1. Objective
-This document outlines the communication standards, internal protocols, and Service Level Agreements (SLAs) for the team to ensure project success, efficiency, and full alignment with IEEE standards.
-
-## 2. Communication Channels
-To maintain clarity and efficiency, the following channels are established:
-* **Official Discussions & Documentation:** GitHub/GitLab (Issues & Pull Requests).
-* **Daily Syncs & Urgent Queries:** Team WhatsApp Group/Slack.
-* **Meetings:** Zoom/Microsoft Teams.
-
-## 3. Communication SLA
-* **Urgent Messages:** Response required within 2 hours.
-* **General Inquiries:** Response required within 24 hours.
-* **Core Hours:** Team members are expected to be reachable between [Insert your core hours, e.g., 10:00 AM - 2:00 PM].
-
-## 4. Code Review & SLA Boundaries
-To ensure code quality and adhere to IEEE engineering standards:
-* **Pull Request Review:** All code submissions must be reviewed by at least one team member within **24 hours** of submission.
-* **Feedback Integration:** Requested changes must be addressed by the author within **48 hours**.
-* **Escalation Path:** If an SLA boundary is breached, the issue must be escalated to the Project Lead to prevent project bottlenecks.
-
-## 5. Peer Review Checklist (IEEE Standards)
-Every peer review must verify the following:
-1. **Code Structure:** Indentation and naming conventions adhere to IEEE styles.
-2. **Documentation:** Javadoc/Comments are present for all complex functions.
-3. **Functionality:** The code complies with the project's functional requirements.
-
-## Member 4 – Architecture & .gitignore
-
-### Project Architecture
-
-The project follows the standard Gradle/Kotlin directory structure:
-
-```text
-Team_Project/
-├── src/
-│   └── main/
-│       └── kotlin/
-│           └── Main.kt
-├── .gitignore
-├── build.gradle.kts
-├── settings.gradle.kts
-├── gradle.properties
-├── gradlew
-└── gradlew.bat
-```
-
-**Architecture Guidelines**
-- All source code is stored in `src/main/kotlin`.
-- `Main.kt` serves as the application's current entry point.
-- Project configuration is managed through Gradle using `build.gradle.kts` and `settings.gradle.kts`.
-- Additional packages and source files should be placed under `src/main/kotlin` as the project grows.
-
----
-
-### .gitignore Exclusions
-
-The project excludes generated files, IDE settings, and local configuration files from version control to keep the repository clean and consistent.
-
-Ignored files and directories include:
-
-- IntelliJ IDEA files (`.idea/`, `*.iml`, `*.ipr`, `*.iws`)
-- Gradle and Kotlin generated files (`.gradle/`, `.kotlin/`, `build/`, `**/build/`)
-- Android build files (`.cxx/`, `.externalNativeBuild/`, `captures/`, `app/build/`)
-- Environment and local configuration files (`.env`, `.secrets/`, `local.properties`)
-- Node.js dependencies (`node_modules/`)
-- macOS system files (`.DS_Store`)
-- JVM build artifacts (`*.class`, `*.war`, `*.ear`)
-- Log files (`*.log`)
-- Xcode generated files (`xcuserdata`, `*.xcodeproj/*`)
