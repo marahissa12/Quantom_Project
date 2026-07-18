@@ -119,3 +119,6 @@ fun readPackages(fileName: String): List<Package> {
 
     return packages
 }
+fun compareByWeight(first: Package, second: Package): Boolean {
+    return first.weight > second.weight
+}
