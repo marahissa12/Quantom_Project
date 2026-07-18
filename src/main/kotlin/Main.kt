@@ -26,19 +26,39 @@ fun isBetter(first: Package, second: Package): Boolean {
         return compareByWeight(first, second)
 }
 
+fun selectionSortPackages(packages: MutableList<Package>) {
+        val listSize = packages.size
+
+        for (i in 0 until listSize - 1) {
+                var bestPackageIndex = i
+
+                for (j in i + 1 until listSize) {
+                        if (isBetter(packages[j], packages[bestPackageIndex])) {
+                                bestPackageIndex = j
+                        }
+                }
+
+                if (bestPackageIndex != i) {
+                        val tempPackage = packages[i]
+                        packages[i] = packages[bestPackageIndex]
+                        packages[bestPackageIndex] = tempPackage
+                }
+        }
+}
 
 fun main() {
-    
-
         // Test the CSV reading function
+        val loadedPackages = readPackages("packages.csv")
         val packages = readPackages("packages.csv")
 
-        // Print all loaded items to verify they were parsed correctly
-        println("\n--- Loaded Packages Data ---")
-        println(packages.size)
-        packages.forEach { pkg ->
-            println("ID: ${pkg.id}, Weight: ${pkg.weight}, Dest: ${pkg.destinationHubId}, Priority: ${pkg.priority}")
+        val packagesToSort = loadedPackages.toMutableList()
+        selectionSortPackages(packagesToSort)
+
+        // طباعة أفضل 3 طرود للتحقق من صحة الترتيب
+        println("\n--- Top 3 Urgent & Heaviest Packages ---")
+        val topPackages = packagesToSort.take(3)
+        topPackages.forEach { pkg ->
+                println("ID: ${pkg.id}, Weight: ${pkg.weight}, Dest: ${pkg.destinationHubId}, Priority: ${pkg.priority}")
         }
 
 }
-
