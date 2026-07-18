@@ -84,10 +84,9 @@ fun readPackages(fileName: String): List<Package> {
 
                     if (weight == null) {
 
-                        println(
-                            "Warning: Invalid weight at line $lineNumber. " +
-                                    "Using default value -1.0"
-                        )
+                        println("Warning: Invalid weight at line $lineNumber. " +
+                                    "Invalid weight")
+                        return@forEachIndexed
 
                     }
 
@@ -98,7 +97,7 @@ fun readPackages(fileName: String): List<Package> {
 
                     val packageItem = Package(
                         id = columns[0],
-                        weight = weight ?: -1.0,
+                        weight = weight,
                         destinationHubId = columns[2],
                         priority = priority
                     )
@@ -121,6 +120,7 @@ fun readPackages(fileName: String): List<Package> {
     return packages
 }
 fun main() {
+    
 
         // Test the CSV reading function
         val packages = readPackages("packages.csv")
