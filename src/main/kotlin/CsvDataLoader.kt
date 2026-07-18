@@ -119,3 +119,17 @@ fun readPackages(fileName: String): List<Package> {
 
     return packages
 }
+
+fun priorityValue(priority: Priority): Int {
+    return when (priority) {
+        Priority.URGENT -> 3
+        Priority.STANDARD -> 2
+        Priority.LOW -> 1
+    }
+}
+
+fun compareByPriority(first: Package, second: Package): Boolean {
+    val firstPriority = priorityValue(first.priority)
+    val secondPriority = priorityValue(second.priority)
+    return firstPriority > secondPriority
+}
