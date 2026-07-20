@@ -54,9 +54,11 @@ All commits must follow the **Conventional Commits** specification: `type(scope)
 * **Pull Request Review:** Review required within **24 hours**.
 * **Feedback Integration:** Requested changes addressed within **48 hours**.
 
-### 4.3 Peer Review Checklist (IEEE Standards)
-Every review must verify: (1) Code Structure/Naming, (2) IEEE-compliant documentation for complex functions, (3) Functional requirements compliance.
-
+### 4.3 Peer Review Checklist 
+Every review must verify:
+1. Code Structure/Naming.
+2. IEEE-compliant documentation for complex functions.
+3. Compliance with functional requirements.
 ---
 
 ## 5. Hadeel Hejazy – Architecture & .gitignore
