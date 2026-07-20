@@ -5,7 +5,65 @@ import java.io.IOException
 
 private const val RESOURCE_PATH = "src/resources"
 
-// Packages Reader
+private fun hasExpectedColumns(
+    columns: List<String>,
+    expected: Int,
+    lineNumber: Int
+): Boolean {
+    if (columns.size != expected) {
+        println(
+            "Warning: Skipping line $lineNumber. " +
+                    "Expected $expected columns but found ${columns.size}."
+        )
+        return false
+    }
+
+    return true
+}
+
+private fun hasRequiredValues(
+    lineNumber: Int,
+    message: String,
+    vararg values: String
+): Boolean {
+    if (values.any(String::isBlank)) {
+        println(
+            "Warning: Skipping line $lineNumber. " +
+                    message
+        )
+        return false
+    }
+
+    return true
+}
+
+private fun parseDouble(
+    value: String,
+    fieldName: String,
+    lineNumber: Int
+): Double? {
+    return value.toDoubleOrNull() ?: run {
+        println(
+            "Warning: Skipping line $lineNumber. " +
+                    "Invalid $fieldName '$value'."
+        )
+        null
+    }
+}
+
+private fun parseInt(
+    value: String,
+    fieldName: String,
+    lineNumber: Int
+): Int? {
+    return value.toIntOrNull() ?: run {
+        println(
+            "Warning: Skipping line $lineNumber. " +
+                    "Invalid $fieldName '$value'."
+        )
+        null
+    }
+}
 
 fun parsePriority(value: String): Priority {
     return when (value.trim().uppercase()) {
@@ -22,11 +80,7 @@ fun parsePriority(value: String): Priority {
 private fun parsePackage(line: String, lineNumber: Int): packageRow? {
     val columns = line.split(",").map(String::trim)
 
-    if (columns.size != 4) {
-        println(
-            "Warning: Skipping line $lineNumber. " +
-                    "Expected 4 columns but found ${columns.size}."
-        )
+    if (!hasExpectedColumns(columns, 4, lineNumber)) {
         return null
     }
 
@@ -35,23 +89,18 @@ private fun parsePackage(line: String, lineNumber: Int): packageRow? {
     val destinationHubId = columns[2]
     val priorityValue = columns[3]
 
-    if (id.isBlank() || destinationHubId.isBlank()) {
-        println(
-            "Warning: Skipping line $lineNumber. " +
-                    "Missing required data (ID or Destination)."
+    if (
+        !hasRequiredValues(
+            lineNumber,
+            "Missing required data (ID or Destination).",
+            id,
+            destinationHubId
         )
+    ) {
         return null
     }
 
-    val weight = weightValue.toDoubleOrNull()
-
-    if (weight == null) {
-        println(
-            "Warning: Skipping line $lineNumber. " +
-                    "Invalid weight '$weightValue'."
-        )
-        return null
-    }
+    val weight =parseDouble(weightValue, "weight", lineNumber)?: return null
 
     return packageRow(
         id = id,
@@ -72,16 +121,14 @@ fun readPackages(fileName: String): List<packageRow> {
     return packages
 }
 
-// Vehicles Reader
+private fun parseVehicle(
+    line: String,
+    lineNumber: Int
+): vehicleRow? {
 
-private fun parseVehicle(line: String, lineNumber: Int): vehicleRow? {
     val columns = line.split(",").map(String::trim)
 
-    if (columns.size != 4) {
-        println(
-            "Warning: Skipping line $lineNumber. " +
-                    "Expected 4 columns but found ${columns.size}."
-        )
+    if (!hasExpectedColumns(columns, 4, lineNumber)) {
         return null
     }
 
@@ -90,33 +137,22 @@ private fun parseVehicle(line: String, lineNumber: Int): vehicleRow? {
     val maxCapacityValue = columns[2]
     val costPerKmValue = columns[3]
 
-    if (vehicleId.isBlank() || currentHubId.isBlank()) {
-        println(
-            "Warning: Skipping line $lineNumber. " +
-                    "Missing required data (Vehicle ID or Current Hub ID)."
+    if (
+        !hasRequiredValues(
+            lineNumber,
+            "Missing required data (Vehicle ID or Current Hub ID).",
+            vehicleId,
+            currentHubId
         )
+    ) {
         return null
     }
 
-    val maxCapacityKg = maxCapacityValue.toDoubleOrNull()
+    val maxCapacityKg = parseDouble(maxCapacityValue, "maximum capacity", lineNumber)
+            ?: return null
 
-    if (maxCapacityKg == null) {
-        println(
-            "Warning: Skipping line $lineNumber. " +
-                    "Invalid maximum capacity '$maxCapacityValue'."
-        )
-        return null
-    }
-
-    val costPerKm = costPerKmValue.toDoubleOrNull()
-
-    if (costPerKm == null) {
-        println(
-            "Warning: Skipping line $lineNumber. " +
-                    "Invalid cost per kilometer '$costPerKmValue'."
-        )
-        return null
-    }
+    val costPerKm = parseDouble(costPerKmValue, "cost per kilometer", lineNumber)
+            ?: return null
 
     return vehicleRow(
         vehicleId = vehicleId,
@@ -137,16 +173,14 @@ fun readVehicles(fileName: String): List<vehicleRow> {
     return vehicles
 }
 
-// Routes Reader
+private fun parseRoute(
+    line: String,
+    lineNumber: Int
+): routeRow? {
 
-private fun parseRoute(line: String, lineNumber: Int): routeRow? {
     val columns = line.split(",").map(String::trim)
 
-    if (columns.size != 5) {
-        println(
-            "Warning: Skipping line $lineNumber. " +
-                    "Expected 5 columns but found ${columns.size}."
-        )
+    if (!hasExpectedColumns(columns, 5, lineNumber)) {
         return null
     }
 
@@ -157,36 +191,24 @@ private fun parseRoute(line: String, lineNumber: Int): routeRow? {
     val typicalDelayValue = columns[4]
 
     if (
-        routeId.isBlank() ||
-        originHubId.isBlank() ||
-        destinationHubId.isBlank()
+        !hasRequiredValues(
+            lineNumber,
+            "Missing required data (Route ID, Origin Hub ID, or Destination Hub ID).",
+            routeId,
+            originHubId,
+            destinationHubId
+        )
     ) {
-        println(
-            "Warning: Skipping line $lineNumber. " +
-                    "Missing required data (Route ID, Origin Hub ID, or Destination Hub ID)."
-        )
         return null
     }
 
-    val distanceKm = distanceValue.toDoubleOrNull()
+    val distanceKm =
+        parseDouble(distanceValue, "distance", lineNumber)
+            ?: return null
 
-    if (distanceKm == null) {
-        println(
-            "Warning: Skipping line $lineNumber. " +
-                    "Invalid distance '$distanceValue'."
-        )
-        return null
-    }
-
-    val typicalDelayMin = typicalDelayValue.toIntOrNull()
-
-    if (typicalDelayMin == null) {
-        println(
-            "Warning: Skipping line $lineNumber. " +
-                    "Invalid typical delay '$typicalDelayValue'."
-        )
-        return null
-    }
+    val typicalDelayMin =
+        parseInt(typicalDelayValue, "typical delay", lineNumber)
+            ?: return null
 
     return routeRow(
         routeId = routeId,
@@ -208,16 +230,14 @@ fun readRoutes(fileName: String): List<routeRow> {
     return routes
 }
 
-// Warehouses Reader
+private fun parseWarehouse(
+    line: String,
+    lineNumber: Int
+): warehouseRow? {
 
-private fun parseWarehouse(line: String, lineNumber: Int): warehouseRow? {
     val columns = line.split(",").map(String::trim)
 
-    if (columns.size != 3) {
-        println(
-            "Warning: Skipping line $lineNumber. " +
-                    "Expected 3 columns but found ${columns.size}."
-        )
+    if (!hasExpectedColumns(columns, 3, lineNumber)) {
         return null
     }
 
@@ -225,11 +245,15 @@ private fun parseWarehouse(line: String, lineNumber: Int): warehouseRow? {
     val name = columns[1]
     val regionalZone = columns[2]
 
-    if (id.isBlank() || name.isBlank() || regionalZone.isBlank()) {
-        println(
-            "Warning: Skipping line $lineNumber. " +
-                    "Missing required warehouse data."
+    if (
+        !hasRequiredValues(
+            lineNumber,
+            "Missing required warehouse data.",
+            id,
+            name,
+            regionalZone
         )
+    ) {
         return null
     }
 
@@ -239,19 +263,6 @@ private fun parseWarehouse(line: String, lineNumber: Int): warehouseRow? {
         regionalZone = regionalZone
     )
 }
-
-fun readWarehouses(fileName: String): List<warehouseRow> {
-    val warehouses = mutableListOf<warehouseRow>()
-
-    readCsvFile(fileName) { line, lineNumber ->
-        parseWarehouse(line, lineNumber)?.let(warehouses::add)
-    }
-
-    println("Successfully parsed warehouses: ${warehouses.size}")
-    return warehouses
-}
-
-// Common CSV Reader
 
 private fun readCsvFile(
     fileName: String,
